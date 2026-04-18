@@ -36,16 +36,35 @@ body {
   overflow-x: hidden;
 }
 
-/* ─── Full-page game navigation ─────────────────────────── */
+/* ─── IDE Layout utilities ───────────────────────────────── */
+
+/* Hide scrollbar completely */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* Thin styled scrollbar for content areas */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #1e293b transparent;
+}
+.scrollbar-thin::-webkit-scrollbar { width: 5px; height: 5px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover { background: rgba(0,255,136,0.4); }
+
+/* ─── Legacy snap-container (kept for reference) ─────────── */
 .snap-container {
   height: 100vh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
-  scrollbar-width: none;          /* Firefox */
+  scrollbar-width: none;
 }
 .snap-container::-webkit-scrollbar { display: none; }
-
-/* Every direct-child section snaps and fills the screen */
 .snap-container > section {
   height: 100vh;
   overflow-y: auto;

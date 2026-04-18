@@ -1,20 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useNavigate } from "@/context/NavigationContext";
 
 interface Props {
   to: string;
   label: string;
 }
 
-/**
- * Terminal-style "go to next level" button shown at the bottom of each section.
- * Clicking it scrolls the snap container to the target section.
- */
 export default function NextSection({ to, label }: Props) {
-  const handleClick = () => {
-    document.getElementById(to)?.scrollIntoView({ behavior: "smooth" });
-  };
+  const navigate = useNavigate();
 
   return (
     <motion.div
@@ -24,7 +19,7 @@ export default function NextSection({ to, label }: Props) {
       className="flex justify-center pt-10 pb-6"
     >
       <button
-        onClick={handleClick}
+        onClick={() => navigate(to)}
         className="group flex items-center gap-3 font-mono text-xs text-[var(--muted)] hover:text-green-glow transition-all duration-200"
       >
         <span className="text-[var(--border)] group-hover:text-green-glow transition-colors">$</span>

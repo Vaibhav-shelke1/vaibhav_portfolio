@@ -200,18 +200,18 @@ export default function Hero({ onNavigate }: { onNavigate: (id: string) => void 
           transition={{ delay: 0.6 }}
           className="flex flex-wrap gap-3 mb-14"
         >
-          <a
-            href="#projects"
+          <button
+            onClick={() => onNavigate("projects")}
             className="font-mono text-sm px-5 py-2.5 rounded border border-green-glow text-green-glow hover:bg-[rgba(0,255,136,0.1)] transition-all duration-200 hover:shadow-[0_0_20px_rgba(0,255,136,0.3)]"
           >
             GET /projects
-          </a>
-          <a
-            href="#contact"
+          </button>
+          <button
+            onClick={() => onNavigate("contact")}
             className="font-mono text-sm px-5 py-2.5 rounded border border-[rgba(0,212,255,0.4)] text-cyan-glow hover:bg-[rgba(0,212,255,0.08)] transition-all duration-200"
           >
             POST /contact
-          </a>
+          </button>
           <a
             href="https://www.linkedin.com/in/vaibhav-shelke-264ba22b7"
             target="_blank"
