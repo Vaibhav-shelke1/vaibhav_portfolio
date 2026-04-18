@@ -6,9 +6,11 @@ import { NavigationContext } from "@/context/NavigationContext";
 import Hero from "./Hero";
 import Skills from "./Skills";
 import Experience from "./Experience";
+import Education from "./Education";
 import GitHubContributions from "./GitHubContributions";
 import Projects from "./Projects";
 import Achievements from "./Achievements";
+import LeetCode from "./LeetCode";
 import Contact from "./Contact";
 import Terminal from "./Terminal";
 
@@ -18,9 +20,11 @@ const FILES = [
   { id: "about",        label: "about.tsx",        lang: "TypeScript JSX", icon: "⚛",  col: "#61DAFB" },
   { id: "skills",       label: "skills.ts",         lang: "TypeScript",     icon: "ts", col: "#3178C6" },
   { id: "experience",   label: "experience.json",   lang: "JSON",           icon: "{}",col: "#ffd32a" },
+  { id: "education",    label: "education.json",    lang: "JSON",           icon: "{}",col: "#ffd32a" },
   { id: "github",       label: "github.md",         lang: "Markdown",       icon: "#",  col: "#9d4edd" },
   { id: "projects",     label: "projects.ts",       lang: "TypeScript",     icon: "ts", col: "#3178C6" },
   { id: "achievements", label: "achievements.ts",   lang: "TypeScript",     icon: "ts", col: "#3178C6" },
+  { id: "leetcode",     label: "leetcode.ts",       lang: "TypeScript",     icon: "ts", col: "#f89f1b" },
   { id: "contact",      label: "contact.tsx",       lang: "TypeScript JSX", icon: "⚛",  col: "#61DAFB" },
 ] as const;
 
@@ -35,9 +39,11 @@ const SECTION_MAP: Record<FileId, React.ComponentType<any>> = {
   about:        Hero,
   skills:       Skills,
   experience:   Experience,
+  education:    Education,
   github:       GitHubContributions,
   projects:     Projects,
   achievements: Achievements,
+  leetcode:     LeetCode,
   contact:      Contact,
 };
 
@@ -45,42 +51,58 @@ const ALL_IDS = FILES.map((f) => f.id as FileId);
 
 /* ─── TitleBar ──────────────────────────────────────────────────────────── */
 
-function TitleBar({ label }: { label: string }) {
+function TitleBar({
+  label,
+  onMenuOpen,
+}: {
+  label: string;
+  onMenuOpen: () => void;
+}) {
   return (
     <div
-      className="flex items-center h-8 px-4 select-none flex-shrink-0"
+      className="flex items-center h-8 px-3 select-none flex-shrink-0 gap-2"
       style={{ background: "#010409", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
     >
-      <div className="flex items-center gap-1.5">
-        <div
-          className="w-3 h-3 rounded-full bg-[#ff5f57] cursor-pointer hover:brightness-125 transition-all group relative"
-          title="Close"
-        >
-          <span className="absolute inset-0 flex items-center justify-center text-[#7d1f1f] text-[8px] opacity-0 group-hover:opacity-100 font-bold leading-none">
-            ✕
-          </span>
-        </div>
-        <div
-          className="w-3 h-3 rounded-full bg-[#febc2e] cursor-pointer hover:brightness-125 transition-all group relative"
-          title="Minimize"
-        >
-          <span className="absolute inset-0 flex items-center justify-center text-[#7d5800] text-[8px] opacity-0 group-hover:opacity-100 font-bold leading-none">
-            −
-          </span>
-        </div>
-        <div
-          className="w-3 h-3 rounded-full bg-[#28c840] cursor-pointer hover:brightness-125 transition-all group relative"
-          title="Zoom"
-        >
-          <span className="absolute inset-0 flex items-center justify-center text-[#0a4d1f] text-[8px] opacity-0 group-hover:opacity-100 font-bold leading-none">
-            +
-          </span>
-        </div>
+      {/* Traffic lights */}
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        {[
+          { bg: "#ff5f57", hover: "#7d1f1f", glyph: "✕" },
+          { bg: "#febc2e", hover: "#7d5800", glyph: "−" },
+          { bg: "#28c840", hover: "#0a4d1f", glyph: "+" },
+        ].map(({ bg, hover, glyph }) => (
+          <div
+            key={bg}
+            className="w-3 h-3 rounded-full cursor-pointer hover:brightness-125 transition-all group relative flex-shrink-0"
+            style={{ background: bg }}
+          >
+            <span
+              className="absolute inset-0 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 font-bold leading-none"
+              style={{ color: hover }}
+            >
+              {glyph}
+            </span>
+          </div>
+        ))}
       </div>
-      <p className="flex-1 text-center text-[11px] font-mono text-[#666]">
-        {label} — vaibhav.portfolio — Visual Studio Code
+
+      {/* Title — truncated on small screens */}
+      <p className="flex-1 text-center text-[11px] font-mono text-[#666] truncate px-2">
+        <span className="hidden sm:inline">{label} — </span>
+        <span>vaibhav.portfolio</span>
+        <span className="hidden lg:inline"> — Visual Studio Code</span>
       </p>
-      <div className="w-24" />
+
+      {/* Mobile: file picker button */}
+      <button
+        onClick={onMenuOpen}
+        className="md:hidden flex items-center gap-1 text-[#858585] hover:text-[#d4d4d4] transition-colors text-[11px] font-mono flex-shrink-0 px-1"
+        title="Open file"
+      >
+        <span>⌕</span>
+      </button>
+
+      {/* Right spacer (desktop only) */}
+      <div className="hidden md:block w-20 flex-shrink-0" />
     </div>
   );
 }
@@ -611,6 +633,83 @@ function WelcomeScreen({ onOpen }: { onOpen: (id: FileId) => void }) {
   );
 }
 
+/* ─── Mobile Navigation Bar ─────────────────────────────────────────────── */
+
+function MobileNav({
+  activeId,
+  onNavigate,
+}: {
+  activeId: FileId;
+  onNavigate: (id: FileId) => void;
+}) {
+  const idx = FILES.findIndex((f) => f.id === activeId);
+  const prev = idx > 0 ? FILES[idx - 1] : null;
+  const next = idx < FILES.length - 1 ? FILES[idx + 1] : null;
+  const file = FILE_MAP[activeId];
+
+  return (
+    <div
+      className="md:hidden flex items-center justify-between px-4 py-2.5 flex-shrink-0 border-t"
+      style={{ background: "#0a0d14", borderColor: "#1e293b" }}
+    >
+      {/* Prev */}
+      <button
+        onClick={() => prev && onNavigate(prev.id as FileId)}
+        disabled={!prev}
+        className="flex items-center gap-1.5 text-[11px] font-mono text-[#858585] hover:text-[#d4d4d4] disabled:opacity-25 transition-colors min-w-[80px]"
+      >
+        {prev ? (
+          <>
+            <span className="text-xs">←</span>
+            <span
+              style={{ color: prev.col }}
+              className="text-[9px] font-bold"
+            >
+              {prev.icon === "ts" ? "TS" : prev.icon}
+            </span>
+            <span className="truncate max-w-[60px]">{prev.label}</span>
+          </>
+        ) : (
+          <span className="opacity-0">·</span>
+        )}
+      </button>
+
+      {/* Current file */}
+      <div className="flex items-center gap-2 text-[11px] font-mono">
+        <span style={{ color: file.col }} className="text-[10px] font-bold flex-shrink-0">
+          {file.icon === "ts" ? "TS" : file.icon}
+        </span>
+        <span className="text-[#d4d4d4] font-medium">{file.label}</span>
+        <span className="text-[#444] text-[9px]">
+          {idx + 1}/{FILES.length}
+        </span>
+      </div>
+
+      {/* Next */}
+      <button
+        onClick={() => next && onNavigate(next.id as FileId)}
+        disabled={!next}
+        className="flex items-center gap-1.5 text-[11px] font-mono text-[#858585] hover:text-[#d4d4d4] disabled:opacity-25 transition-colors justify-end min-w-[80px]"
+      >
+        {next ? (
+          <>
+            <span className="truncate max-w-[60px]">{next.label}</span>
+            <span
+              style={{ color: next.col }}
+              className="text-[9px] font-bold"
+            >
+              {next.icon === "ts" ? "TS" : next.icon}
+            </span>
+            <span className="text-xs">→</span>
+          </>
+        ) : (
+          <span className="opacity-0">·</span>
+        )}
+      </button>
+    </div>
+  );
+}
+
 /* ─── Main IDELayout ────────────────────────────────────────────────────── */
 
 export default function IDELayout() {
@@ -686,7 +785,7 @@ export default function IDELayout() {
     <NavigationContext.Provider value={navigate}>
       <div className="w-screen h-screen flex flex-col overflow-hidden font-mono">
         {/* Window Chrome */}
-        <TitleBar label={FILE_MAP[activeId].label} />
+        <TitleBar label={FILE_MAP[activeId].label} onMenuOpen={() => setCmdOpen(true)} />
         <MenuBar />
 
         {/* Main area */}
@@ -761,6 +860,9 @@ export default function IDELayout() {
             </div>
           </div>
         </div>
+
+        {/* Mobile prev/next navigation */}
+        <MobileNav activeId={activeId} onNavigate={openFile} />
 
         {/* Status Bar */}
         <StatusBar activeId={activeId} />
