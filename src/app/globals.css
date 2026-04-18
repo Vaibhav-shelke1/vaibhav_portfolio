@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --green: #00ff88;
+  --cyan: #00d4ff;
+  --purple: #9d4edd;
+  --red: #ff4757;
+  --yellow: #ffd32a;
+  --bg: #0a0e1a;
+  --surface: #0d1117;
+  --card: #111827;
+  --border: #1e293b;
+  --text: #e2e8f0;
+  --muted: #64748b;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 64px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  overflow-x: hidden;
+}
+
+/* ─── Full-page game navigation ─────────────────────────── */
+.snap-container {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;          /* Firefox */
+}
+.snap-container::-webkit-scrollbar { display: none; }
+
+/* Every direct-child section snaps and fills the screen */
+.snap-container > section {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  scrollbar-width: thin;
+  scrollbar-color: #1e293b transparent;
+}
+.snap-container > section::-webkit-scrollbar { width: 4px; }
+.snap-container > section::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 2px;
+}
+.snap-container > section::-webkit-scrollbar-thumb:hover { background: var(--green); }
+
+/* Section inner-content centering wrapper */
+.section-inner {
+  max-width: 72rem;          /* same as max-w-6xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 4rem 1.5rem;      /* py-16 px-6 */
+}
+
+/* Glitch flash on level-change */
+@keyframes level-flash {
+  0%   { opacity: 1; }
+  15%  { opacity: 0.05; }
+  30%  { opacity: 0.9; }
+  45%  { opacity: 0.1; }
+  60%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+.level-flash { animation: level-flash 0.35s ease-out forwards; }
+
+/* ─── Scrollbar (non-snap pages / inner sections) ───────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--green); }
+
+/* Selection */
+::selection { background: rgba(0,255,136,0.2); color: var(--green); }
+
+/* Glow utilities */
+.glow-green { text-shadow: 0 0 10px rgba(0,255,136,0.6); }
+.glow-cyan  { text-shadow: 0 0 10px rgba(0,212,255,0.6); }
+
+.border-glow {
+  border: 1px solid rgba(0,255,136,0.15);
+  box-shadow: 0 0 0 1px rgba(0,255,136,0.05) inset, 0 4px 24px rgba(0,0,0,0.5);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.border-glow:hover {
+  border-color: rgba(0,255,136,0.4);
+  box-shadow: 0 0 20px rgba(0,255,136,0.15), 0 4px 24px rgba(0,0,0,0.5);
+}
+
+/* Scan line overlay */
+.scan-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Status dot */
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--green); }
+  50%       { opacity: 0.6; box-shadow: 0 0 16px var(--green); }
+}
+
+/* Typing cursor */
+.cursor::after {
+  content: '_';
+  animation: blink 1s step-end infinite;
+  color: var(--green);
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Method badges */
+.badge-get    { color: #4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.08); }
+.badge-post   { color: #60a5fa; border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.08); }
+.badge-put    { color: #fbbf24; border-color: rgba(251,191,36,0.3);  background: rgba(251,191,36,0.08); }
+.badge-delete { color: #f87171; border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.08); }
