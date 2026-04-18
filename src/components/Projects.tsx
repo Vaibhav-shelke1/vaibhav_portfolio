@@ -326,7 +326,7 @@ export default function Projects() {
           </div>
         </motion.div>
 
-        <NextSection to="achievements" label="achievements" />
+        <NextSection to="leetcode" label="leetcode" />
       </div>
     </section>
   );

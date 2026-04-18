@@ -9,10 +9,10 @@ import Experience from "./Experience";
 import Education from "./Education";
 import GitHubContributions from "./GitHubContributions";
 import Projects from "./Projects";
-import Achievements from "./Achievements";
 import LeetCode from "./LeetCode";
 import Contact from "./Contact";
 import Terminal from "./Terminal";
+import CursorTrail from "./CursorTrail";
 
 /* ─── Data ─────────────────────────────────────────────────────────────── */
 
@@ -23,7 +23,6 @@ const FILES = [
   { id: "education",    label: "education.json",    lang: "JSON",           icon: "{}",col: "#ffd32a" },
   { id: "github",       label: "github.md",         lang: "Markdown",       icon: "#",  col: "#9d4edd" },
   { id: "projects",     label: "projects.ts",       lang: "TypeScript",     icon: "ts", col: "#3178C6" },
-  { id: "achievements", label: "achievements.ts",   lang: "TypeScript",     icon: "ts", col: "#3178C6" },
   { id: "leetcode",     label: "leetcode.ts",       lang: "TypeScript",     icon: "ts", col: "#f89f1b" },
   { id: "contact",      label: "contact.tsx",       lang: "TypeScript JSX", icon: "⚛",  col: "#61DAFB" },
 ] as const;
@@ -42,7 +41,6 @@ const SECTION_MAP: Record<FileId, React.ComponentType<any>> = {
   education:    Education,
   github:       GitHubContributions,
   projects:     Projects,
-  achievements: Achievements,
   leetcode:     LeetCode,
   contact:      Contact,
 };
@@ -390,6 +388,7 @@ function StatusBar({ activeId }: { activeId: FileId }) {
   const [time, setTime] = useState(
     () => new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
   );
+  const [visitors, setVisitors] = useState<number | null>(null);
 
   useEffect(() => {
     const t = setInterval(
@@ -400,6 +399,13 @@ function StatusBar({ activeId }: { activeId: FileId }) {
       10000
     );
     return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/visitors")
+      .then((r) => r.json())
+      .then((d) => { if (d.count) setVisitors(d.count); })
+      .catch(() => {});
   }, []);
 
   return (
@@ -429,6 +435,12 @@ function StatusBar({ activeId }: { activeId: FileId }) {
           />
           <span className="text-[#00ff88]">Available for hire</span>
         </span>
+        {visitors !== null && (
+          <span className="px-2.5 h-full items-center text-[#858585] hover:bg-white/5 cursor-pointer transition-colors hidden sm:flex gap-1">
+            <span>👥</span>
+            <span>{visitors.toLocaleString()} views</span>
+          </span>
+        )}
         <span className="px-2.5 h-full items-center text-[#858585] hover:bg-white/5 cursor-pointer transition-colors hidden sm:flex">
           {time}
         </span>
@@ -710,6 +722,137 @@ function MobileNav({
   );
 }
 
+/* ─── Hiring Manager Overlay ─────────────────────────────────────────────── */
+
+function HiringManagerOverlay({ onClose }: { onClose: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+      style={{ background: "rgba(1,4,9,0.92)", backdropFilter: "blur(6px)" }}
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.94, y: 20, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={{ scale: 0.94, y: 20, opacity: 0 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-2xl rounded-lg overflow-hidden font-mono"
+        style={{ background: "#0d1117", border: "1px solid rgba(0,255,136,0.25)", boxShadow: "0 0 60px rgba(0,255,136,0.1)" }}
+      >
+        {/* Header bar */}
+        <div className="flex items-center justify-between px-5 py-3 border-b" style={{ borderColor: "rgba(0,255,136,0.15)", background: "#010409" }}>
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] px-2 py-0.5 rounded border font-bold text-[#00ff88] border-[rgba(0,255,136,0.3)] bg-[rgba(0,255,136,0.08)]">HIRING MANAGER MODE</span>
+            <span className="text-[#444] text-[10px]">— TL;DR view</span>
+          </div>
+          <button onClick={onClose} className="text-[#444] hover:text-[#858585] text-xs transition-colors">
+            ESC / H to close
+          </button>
+        </div>
+
+        <div className="p-5 grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-5">
+          {/* Left: identity */}
+          <div className="flex flex-col items-center sm:items-start gap-3">
+            <div className="w-20 h-20 rounded-full overflow-hidden border-2" style={{ borderColor: "rgba(0,255,136,0.3)" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/profile_pic.png" alt="Vaibhav Shelke" className="w-full h-full object-cover" style={{ objectPosition: "center 30%", transform: "scale(1.35)", transformOrigin: "center 35%" }} />
+            </div>
+            <div>
+              <p className="text-[var(--text)] font-bold text-base">Vaibhav Shelke</p>
+              <p className="text-[#00d4ff] text-xs mt-0.5">Full Stack Developer</p>
+              <p className="text-[#444] text-[10px] mt-0.5">B.Tech CSE · 2025</p>
+            </div>
+            <div className="space-y-1.5 text-[10px] w-full">
+              {[
+                { icon: "📧", val: "shelkevaibhav218@gmail.com" },
+                { icon: "📍", val: "India · Open to Remote" },
+                { icon: "⚡", val: "1yr Production Experience" },
+              ].map(({ icon, val }) => (
+                <div key={val} className="flex items-center gap-2 text-[#858585]">
+                  <span>{icon}</span><span>{val}</span>
+                </div>
+              ))}
+            </div>
+            <a
+              href="/Vaibhav_Shelke_Resume_April.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full text-center py-2 text-xs rounded border font-bold text-[#00ff88] border-[rgba(0,255,136,0.4)] hover:bg-[rgba(0,255,136,0.08)] transition-all"
+            >
+              ↓ Download Resume
+            </a>
+          </div>
+
+          {/* Right: summary */}
+          <div className="space-y-4 text-xs">
+            <div>
+              <p className="text-[#444] mb-2">// experience</p>
+              <div className="space-y-1.5">
+                {[
+                  { role: "Full Stack Dev Intern", co: "Konax Technology", when: "Apr 2025 → Now", color: "#00ff88" },
+                  { role: "React Dev Intern", co: "Konax Technology", when: "Oct 2024 → Mar 2025", color: "#00d4ff" },
+                ].map((e) => (
+                  <div key={e.role} className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: e.color }} />
+                    <div>
+                      <span className="text-[var(--text)]">{e.role}</span>
+                      <span className="text-[#444] mx-1">·</span>
+                      <span className="text-[#858585]">{e.co}</span>
+                      <span className="text-[#333] ml-2">{e.when}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[#444] mb-2">// top_skills</p>
+              <div className="flex flex-wrap gap-1.5">
+                {["Next.js", "React", "Node.js", "TypeScript", "MongoDB", "Redis", "PostgreSQL", "Express.js"].map((s) => (
+                  <span key={s} className="px-2 py-0.5 rounded text-[10px] text-[#858585] border" style={{ borderColor: "#1e293b", background: "#111827" }}>{s}</span>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[#444] mb-2">// highlights</p>
+              <div className="space-y-1">
+                {[
+                  "50K+ daily API requests in production · 99.9% uptime",
+                  "1st Runner-Up — NewGenAI Hackathon 2024 (100+ teams)",
+                  "B.Tech First Class, CGPA 7.24 · Dr. BATU 2025",
+                  "200+ LeetCode problems · 100-day consistency badge",
+                ].map((h) => (
+                  <div key={h} className="flex gap-2 text-[#858585]">
+                    <span className="text-[#00ff88] flex-shrink-0">✓</span>
+                    <span>{h}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-2 pt-1">
+              <a href="https://github.com/Vaibhav-shelke1" target="_blank" rel="noopener noreferrer"
+                className="flex-1 text-center py-1.5 text-[10px] rounded border text-[#858585] border-[#1e293b] hover:text-[#d4d4d4] hover:border-[rgba(255,255,255,0.15)] transition-all">
+                GitHub
+              </a>
+              <a href="https://www.linkedin.com/in/vaibhav-shelke-264ba22b7" target="_blank" rel="noopener noreferrer"
+                className="flex-1 text-center py-1.5 text-[10px] rounded border text-[#858585] border-[#1e293b] hover:text-[#00d4ff] hover:border-[rgba(0,212,255,0.3)] transition-all">
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /* ─── Main IDELayout ────────────────────────────────────────────────────── */
 
 export default function IDELayout() {
@@ -718,6 +861,7 @@ export default function IDELayout() {
   const [activeActivity, setActiveActivity] = useState("explorer");
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [cmdOpen, setCmdOpen] = useState(false);
+  const [hiringMode, setHiringMode] = useState(false);
 
   const openFile = useCallback((id: FileId) => {
     setOpenTabs((prev) => (prev.includes(id) ? prev : [...prev, id]));
@@ -772,6 +916,10 @@ export default function IDELayout() {
       }
       if (e.key === "Escape") {
         setCmdOpen(false);
+        setHiringMode(false);
+      }
+      if (e.key === "h" || e.key === "H") {
+        setHiringMode((v) => !v);
       }
     };
     window.addEventListener("keydown", handler);
@@ -873,6 +1021,14 @@ export default function IDELayout() {
 
       {/* Command Palette */}
       <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} onOpen={openFile} />
+
+      {/* Hiring Manager Mode overlay */}
+      <AnimatePresence>
+        {hiringMode && <HiringManagerOverlay onClose={() => setHiringMode(false)} />}
+      </AnimatePresence>
+
+      {/* Cursor trail */}
+      <CursorTrail />
     </NavigationContext.Provider>
   );
 }

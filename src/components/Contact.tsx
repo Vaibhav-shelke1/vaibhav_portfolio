@@ -13,10 +13,17 @@ export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [activeTab, setActiveTab] = useState<"body" | "headers">("body");
   const [responseTime, setResponseTime] = useState<number | null>(null);
+  const [validationError, setValidationError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) return;
+    setValidationError("");
+    if (!form.name.trim()) { setValidationError("name is required"); return; }
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setValidationError("valid email is required");
+      return;
+    }
+    if (!form.message.trim()) { setValidationError("message is required"); return; }
     setStatus("loading");
     const start = Date.now();
     try {
@@ -46,7 +53,7 @@ export default function Contact() {
         transition={{ duration: 0.5 }}
         className="mb-12"
       >
-        <p className="text-green-glow font-mono text-sm mb-2">// section_06</p>
+        <p className="text-green-glow font-mono text-sm mb-2">// section_09</p>
         <h2 className="text-3xl font-bold font-mono text-[var(--text)]">
           Send a{" "}
           <span className="text-green-glow">Request</span>
@@ -120,6 +127,11 @@ export default function Contact() {
           {activeTab === "body" ? (
             <div className="space-y-4 font-mono text-sm">
               <div className="text-[var(--muted)] text-xs mb-3">// application/json</div>
+              {validationError && (
+                <div className="text-[rgba(255,77,77,0.9)] text-xs font-mono px-3 py-2 rounded border border-[rgba(255,77,77,0.2)] bg-[rgba(255,77,77,0.06)] mb-2">
+                  ✕ {validationError}
+                </div>
+              )}
               <div>
                 <label className="text-cyan-glow text-xs block mb-1">"name"</label>
                 <input

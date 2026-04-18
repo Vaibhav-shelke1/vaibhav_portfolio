@@ -7,16 +7,17 @@ interface Line { type: "input" | "output" | "error" | "system"; text: string; }
 
 const HELP_TEXT = `
 Available commands:
-  whoami          — About Vaibhav
-  skills          — List technical skills
-  experience      — Work experience
-  projects        — View projects
-  contact         — Get contact info
-  ping            — Test connection
+  whoami            — About Vaibhav
+  skills            — List technical skills
+  experience        — Work experience
+  projects          — View projects
+  contact           — Get contact info
+  ping              — Test connection
+  resume            — Download resume PDF
   sudo hire vaibhav — Submit hire request
-  git log         — Recent activity
-  clear           — Clear terminal
-  exit            — Close terminal
+  git log           — Recent activity
+  clear             — Clear terminal
+  exit              — Close terminal
 `.trim();
 
 const COMMANDS: Record<string, string | (() => string)> = {
@@ -57,6 +58,24 @@ Verifying credentials...
 * c3a9f44 feat: built role-based dashboard for 200+ agents
 * d5b2k11 feat: JWT auth middleware with refresh tokens
 * e1c7m88 init: portfolio v2.0 — deployed 🚀`,
+
+  resume: () => {
+    setTimeout(() => window.open("/Vaibhav_Shelke_Resume_April.pdf", "_blank"), 600);
+    return `Cloning vaibhav/resume.git...
+remote: Enumerating objects: 1, done.
+remote: Counting objects: 100% (1/1), done.
+Receiving objects: 100% ━━━━━━━━━━━━━━━━ 142 KB
+✓ Vaibhav_Shelke_Resume_April.pdf
+→ Opening in new tab...`;
+  },
+
+  "download resume": () => {
+    setTimeout(() => window.open("/Vaibhav_Shelke_Resume_April.pdf", "_blank"), 600);
+    return `Cloning vaibhav/resume.git...
+remote: Enumerating objects: 1, done.
+Receiving objects: 100% ━━━━━━━━━━━━━━━━ 142 KB
+✓ Vaibhav_Shelke_Resume_April.pdf → Opening in new tab...`;
+  },
 
   help: HELP_TEXT,
 };
