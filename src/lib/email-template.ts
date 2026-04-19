@@ -1,156 +1,75 @@
-/**
- * Confirmation email sent to the person who contacted Vaibhav.
- */
-export function getConfirmationEmailHTML(name: string): string {
+export function getConfirmationEmailHTML(name: string, message: string): string {
+  const escapedMessage = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Thanks for reaching out!</title>
 </head>
-<body style="margin:0;padding:0;background-color:#0a0e1a;font-family:'Segoe UI',Tahoma,Geneva,sans-serif;">
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:'Segoe UI',Tahoma,Geneva,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;border:1px solid #e4e4e7;">
 
-<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0a0e1a;padding:48px 16px;">
-  <tr>
-    <td align="center">
-      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+          <!-- Header -->
+          <tr>
+            <td style="background:#09090b;padding:24px 32px;">
+              <p style="margin:0;font-family:'Courier New',monospace;color:#00ff88;font-size:17px;font-weight:700;">&gt; vaibhav.shelke</p>
+              <p style="margin:4px 0 0;color:#71717a;font-size:12px;font-family:'Courier New',monospace;">Full Stack Developer</p>
+            </td>
+          </tr>
 
-        <!-- TOP BAR -->
-        <tr>
-          <td style="height:3px;background:linear-gradient(90deg,#00ff88,#00d4ff,#9d4edd);border-radius:3px 3px 0 0;"></td>
-        </tr>
+          <!-- Body -->
+          <tr>
+            <td style="padding:32px;">
+              <h2 style="margin:0 0 12px;color:#09090b;font-size:22px;font-weight:700;">Hi ${name},</h2>
+              <p style="margin:0 0 20px;color:#52525b;font-size:15px;line-height:1.7;">
+                Thanks for reaching out! I've received your message and will get back to you within <strong>24 hours</strong>.
+              </p>
 
-        <!-- HEADER -->
-        <tr>
-          <td style="background-color:#0d1117;border:1px solid #1e293b;border-top:none;padding:28px 40px 24px;">
-            <table width="100%" cellpadding="0" cellspacing="0">
-              <tr>
-                <td>
-                  <p style="margin:0;font-family:'Courier New',monospace;color:#00ff88;font-size:20px;font-weight:700;letter-spacing:-0.5px;">
-                    &gt; vaibhav.shelke
-                  </p>
-                  <p style="margin:4px 0 0;font-family:'Courier New',monospace;color:#475569;font-size:12px;">
-                    Full Stack Developer &nbsp;·&nbsp; v2.0.25
-                  </p>
-                </td>
-                <td align="right">
-                  <span style="display:inline-block;font-family:'Courier New',monospace;font-size:10px;color:#00ff88;border:1px solid rgba(0,255,136,0.35);background:rgba(0,255,136,0.07);padding:4px 10px;border-radius:20px;">
-                    ● ONLINE
-                  </span>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+              <!-- Message recap -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;border-radius:6px;margin-bottom:24px;">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0 0 8px;color:#71717a;font-size:11px;font-family:'Courier New',monospace;text-transform:uppercase;letter-spacing:0.05em;">Your message</p>
+                    <p style="margin:0;color:#3f3f46;font-size:14px;line-height:1.7;white-space:pre-wrap;">${escapedMessage}</p>
+                  </td>
+                </tr>
+              </table>
 
-        <!-- BODY -->
-        <tr>
-          <td style="background-color:#111827;border:1px solid #1e293b;border-top:none;padding:40px;">
+              <p style="margin:0 0 24px;color:#52525b;font-size:14px;line-height:1.6;">
+                In the meantime, feel free to explore my work or connect with me:
+              </p>
 
-            <!-- Status comment -->
-            <p style="margin:0 0 6px;font-family:'Courier New',monospace;color:#475569;font-size:11px;">
-              // HTTP 200 OK &nbsp;·&nbsp; message_received
-            </p>
+              <!-- Links -->
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding-right:10px;">
+                    <a href="https://github.com/Vaibhav-shelke1" style="display:inline-block;background:#09090b;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;">GitHub</a>
+                  </td>
+                  <td>
+                    <a href="https://www.linkedin.com/in/vaibhav-shelke-264ba22b7" style="display:inline-block;background:#0a66c2;color:#ffffff;text-decoration:none;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;">LinkedIn</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-            <!-- Greeting -->
-            <h1 style="margin:0 0 20px;color:#e2e8f0;font-size:30px;font-weight:700;line-height:1.2;">
-              Hi ${name}! 👋
-            </h1>
+          <!-- Footer -->
+          <tr>
+            <td style="background:#f4f4f5;padding:16px 32px;border-top:1px solid #e4e4e7;">
+              <p style="margin:0;color:#a1a1aa;font-size:12px;">Vaibhav Shelke · shelkevaibhav218@gmail.com</p>
+              <p style="margin:4px 0 0;color:#d4d4d8;font-size:11px;">This is an automated reply — please do not respond to this email.</p>
+            </td>
+          </tr>
 
-            <!-- Message -->
-            <p style="margin:0 0 16px;color:#94a3b8;font-size:15px;line-height:1.8;">
-              Thanks for reaching out — your message has been received and saved successfully.
-            </p>
-            <p style="margin:0 0 32px;color:#94a3b8;font-size:15px;line-height:1.8;">
-              I'll review it and get back to you within
-              <strong style="color:#00ff88;">24 hours</strong>.
-              In the meantime, feel free to explore my work or connect with me below.
-            </p>
-
-            <!-- Receipt card -->
-            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0d1117;border:1px solid #1e293b;border-radius:8px;margin-bottom:36px;">
-              <tr>
-                <td style="padding:20px 24px;">
-                  <p style="margin:0 0 12px;font-family:'Courier New',monospace;color:#475569;font-size:11px;">
-                    // receipt.json
-                  </p>
-                  <table cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td style="font-family:'Courier New',monospace;color:#4ade80;font-size:13px;padding:4px 0;">
-                        ✓ &nbsp;<span style="color:#64748b;">Message saved to database</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:'Courier New',monospace;color:#4ade80;font-size:13px;padding:4px 0;">
-                        ✓ &nbsp;<span style="color:#64748b;">Notification sent to Vaibhav</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:'Courier New',monospace;color:#4ade80;font-size:13px;padding:4px 0;">
-                        ✓ &nbsp;<span style="color:#64748b;">Response ETA: &lt; 24 hours</span>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-
-            <!-- Connect heading -->
-            <p style="margin:0 0 16px;font-family:'Courier New',monospace;color:#475569;font-size:11px;">
-              // connect_with_me
-            </p>
-
-            <!-- Social buttons -->
-            <table cellpadding="0" cellspacing="0">
-              <tr>
-                <td style="padding-right:12px;padding-bottom:10px;">
-                  <a href="https://www.linkedin.com/in/vaibhav-shelke-264ba22b7"
-                    style="display:inline-block;background-color:#0d1117;border:1px solid rgba(0,212,255,0.4);color:#00d4ff;text-decoration:none;padding:11px 22px;border-radius:6px;font-family:'Courier New',monospace;font-size:12px;font-weight:600;">
-                    in &nbsp; LinkedIn
-                  </a>
-                </td>
-                <td style="padding-right:12px;padding-bottom:10px;">
-                  <a href="https://github.com/Vaibhav-shelke1"
-                    style="display:inline-block;background-color:#0d1117;border:1px solid #1e293b;color:#94a3b8;text-decoration:none;padding:11px 22px;border-radius:6px;font-family:'Courier New',monospace;font-size:12px;">
-                    ⌥ &nbsp; GitHub
-                  </a>
-                </td>
-                <td style="padding-bottom:10px;">
-                  <a href="mailto:shelkevaibhav218@gmail.com"
-                    style="display:inline-block;background-color:#0d1117;border:1px solid #1e293b;color:#94a3b8;text-decoration:none;padding:11px 22px;border-radius:6px;font-family:'Courier New',monospace;font-size:12px;">
-                    @ &nbsp; Email
-                  </a>
-                </td>
-              </tr>
-            </table>
-
-          </td>
-        </tr>
-
-        <!-- FOOTER -->
-        <tr>
-          <td style="background-color:#0d1117;border:1px solid #1e293b;border-top:none;border-radius:0 0 10px 10px;padding:20px 40px;">
-            <table width="100%" cellpadding="0" cellspacing="0">
-              <tr>
-                <td>
-                  <p style="margin:0;font-family:'Courier New',monospace;color:#334155;font-size:11px;">
-                    Vaibhav Shelke &nbsp;·&nbsp; +91-8010161242 &nbsp;·&nbsp; shelkevaibhav218@gmail.com
-                  </p>
-                  <p style="margin:4px 0 0;font-family:'Courier New',monospace;color:#1e293b;font-size:10px;">
-                    This is an automated reply. Please do not reply to this email.
-                  </p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
-
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>`;
 }

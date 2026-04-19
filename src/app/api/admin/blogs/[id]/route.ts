@@ -1,5 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 function isAuthorized(req: Request) {
   return req.headers.get("x-admin-key") === process.env.ADMIN_KEY;
@@ -14,12 +15,16 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
      cover_color=$6, published=$7, updated_at=NOW() WHERE id=$8 RETURNING *`,
     [title, slug, excerpt, content, tags, cover_color, published, params.id]
   );
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${slug}`);
   return NextResponse.json({ blog: rows[0] });
 }
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   if (!isAuthorized(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const sql = neon(process.env.DATABASE_URL!);
-  await sql.query("DELETE FROM blogs WHERE id=$1", [params.id]);
+  const rows = await sql.query("DELETE FROM blogs WHERE id=$1 RETURNING slug", [params.id]);
+  revalidatePath("/blog");
+  if (rows[0]?.slug) revalidatePath(`/blog/${rows[0].slug}`);
   return NextResponse.json({ success: true });
 }

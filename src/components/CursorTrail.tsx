@@ -53,9 +53,15 @@ export default function CursorTrail() {
         vy: -0.6 - Math.random() * 0.5,
       });
       if (particles.current.length > 40) particles.current.shift();
+      // Restart RAF loop if it stopped
+      if (rafRef.current === 0) rafRef.current = requestAnimationFrame(draw);
     };
 
     const draw = () => {
+      if (particles.current.length === 0) {
+        rafRef.current = 0;
+        return; // pause loop when nothing to draw
+      }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.current = particles.current.filter((p) => p.opacity > 0.02);
       for (const p of particles.current) {
@@ -71,7 +77,8 @@ export default function CursorTrail() {
       rafRef.current = requestAnimationFrame(draw);
     };
 
-    rafRef.current = requestAnimationFrame(draw);
+    // Only start RAF loop when mouse moves and adds a particle
+
     window.addEventListener("mousemove", onMove);
 
     return () => {

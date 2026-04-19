@@ -781,33 +781,16 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Seed + notifications */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card className="p-5">
-                    <p className="text-[#333] text-[10px] mb-2 flex items-center gap-1.5"><RefreshCw size={10} /> sample_content</p>
-                    <p className="text-[#858585] text-xs mb-3 leading-relaxed">Seed 3 technical blog posts (Axios, React, Redis). Safe to re-run — skips duplicates.</p>
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <Btn variant="outline" onClick={seedBlogs} disabled={seeding}>
-                        {seeding ? <><Loader2 size={11} className="animate-spin" /> Seeding...</> : "↓ Seed Sample Posts"}
-                      </Btn>
-                      {seedMsg && <span className="text-[10px] text-[#00ff88]">{seedMsg}</span>}
-                    </div>
-                  </Card>
-
+                {/* Notifications card — hidden once granted */}
+                {notifPerm !== "granted" && (
                   <Card className="p-5">
                     <p className="text-[#333] text-[10px] mb-2 flex items-center gap-1.5"><Bell size={10} /> notifications</p>
-                    <p className="text-[#858585] text-xs mb-3 leading-relaxed">
-                      {notifPerm === "granted" ? "Browser notifications are enabled." : "Enable to get todo due-date reminders."}
-                    </p>
-                    {notifPerm === "granted" ? (
-                      <span className="text-[10px] text-[#00ff88] flex items-center gap-1.5"><Check size={10} /> Enabled</span>
-                    ) : (
-                      <Btn variant="outline" onClick={requestNotifications}>
-                        <Bell size={11} /> Enable Notifications
-                      </Btn>
-                    )}
+                    <p className="text-[#858585] text-xs mb-3 leading-relaxed">Enable to get todo due-date reminders in the browser.</p>
+                    <Btn variant="outline" onClick={requestNotifications}>
+                      <Bell size={11} /> Enable Notifications
+                    </Btn>
                   </Card>
-                </div>
+                )}
 
                 {/* Recent contacts */}
                 {contacts.length > 0 && (
@@ -850,32 +833,65 @@ export default function AdminPage() {
                 )}
 
                 {!loading && filteredContacts.length > 0 && (
-                  <Card className="overflow-hidden">
-                    <div className="grid grid-cols-[auto_1fr_1.5fr_110px_80px] gap-0 bg-[#111827] border-b border-[#1e293b] text-[9px] text-[#444] px-4 py-2.5 uppercase tracking-wider">
-                      <span className="w-7">#</span><span>Name</span><span>Email</span><span>Date</span><span>Action</span>
+                  <>
+                    {/* Mobile: card list */}
+                    <div className="md:hidden space-y-2">
+                      {filteredContacts.map((c) => (
+                        <Card key={c.id} className="overflow-hidden">
+                          <button className="w-full text-left px-4 py-3.5 flex items-start justify-between gap-3"
+                            onClick={() => setExpandedContact(expandedContact === c.id ? null : c.id)}>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-[#e2e8f0] text-sm font-medium truncate">{c.name}</p>
+                              <p className="text-[#00d4ff] text-xs mt-0.5 truncate">{c.email}</p>
+                              <p className="text-[#333] text-[10px] mt-1">
+                                {new Date(c.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+                              </p>
+                            </div>
+                            <span className="text-[#2a3444] flex-shrink-0 mt-1">
+                              {expandedContact === c.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                            </span>
+                          </button>
+                          {expandedContact === c.id && (
+                            <div className="px-4 pb-4 pt-1 bg-[#010409] border-t border-[#1e293b]">
+                              <p className="text-[#858585] text-xs leading-relaxed whitespace-pre-wrap">{c.message}</p>
+                              <a href={`mailto:${c.email}?subject=Re: Your message&body=Hi ${c.name},%0A%0A`}
+                                className="inline-flex items-center gap-1.5 mt-3 text-[10px] px-3 py-2 rounded-lg border border-[rgba(0,212,255,0.3)] text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all">
+                                <ArrowUpRight size={10} /> Reply via Email
+                              </a>
+                            </div>
+                          )}
+                        </Card>
+                      ))}
                     </div>
-                    {filteredContacts.map((c, i) => (
-                      <div key={c.id} className="border-b border-[#1e293b] last:border-0">
-                        <div className="grid grid-cols-[auto_1fr_1.5fr_110px_80px] gap-0 px-4 py-3 text-xs cursor-pointer hover:bg-[#111827] transition-colors items-center"
-                          onClick={() => setExpandedContact(expandedContact === c.id ? null : c.id)}>
-                          <span className="text-[#333] w-7 text-[10px]">{i + 1}</span>
-                          <span className="text-[#e2e8f0] truncate pr-3">{c.name}</span>
-                          <span className="text-[#00d4ff] truncate pr-3">{c.email}</span>
-                          <span className="text-[#333] text-[10px]">{new Date(c.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "2-digit" })}</span>
-                          <span className="text-[#333]">{expandedContact === c.id ? <ChevronUp size={12} /> : <ChevronDown size={12} />}</span>
-                        </div>
-                        {expandedContact === c.id && (
-                          <div className="px-4 pb-4 pt-2 bg-[#010409] border-t border-[#1e293b]">
-                            <p className="text-[#858585] text-xs leading-relaxed whitespace-pre-wrap">{c.message}</p>
-                            <a href={`mailto:${c.email}?subject=Re: Your message&body=Hi ${c.name},%0A%0A`}
-                              className="inline-flex items-center gap-1.5 mt-3 text-[10px] px-3 py-1.5 rounded-lg border border-[rgba(0,212,255,0.3)] text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all">
-                              <ArrowUpRight size={10} /> Reply via Email
-                            </a>
-                          </div>
-                        )}
+
+                    {/* Desktop: table */}
+                    <Card className="hidden md:block overflow-hidden">
+                      <div className="grid grid-cols-[auto_1fr_1.5fr_110px_80px] gap-0 bg-[#111827] border-b border-[#1e293b] text-[9px] text-[#444] px-4 py-2.5 uppercase tracking-wider">
+                        <span className="w-7">#</span><span>Name</span><span>Email</span><span>Date</span><span>Action</span>
                       </div>
-                    ))}
-                  </Card>
+                      {filteredContacts.map((c, i) => (
+                        <div key={c.id} className="border-b border-[#1e293b] last:border-0">
+                          <div className="grid grid-cols-[auto_1fr_1.5fr_110px_80px] gap-0 px-4 py-3 text-xs cursor-pointer hover:bg-[#111827] transition-colors items-center"
+                            onClick={() => setExpandedContact(expandedContact === c.id ? null : c.id)}>
+                            <span className="text-[#333] w-7 text-[10px]">{i + 1}</span>
+                            <span className="text-[#e2e8f0] truncate pr-3">{c.name}</span>
+                            <span className="text-[#00d4ff] truncate pr-3">{c.email}</span>
+                            <span className="text-[#333] text-[10px]">{new Date(c.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "2-digit" })}</span>
+                            <span className="text-[#333]">{expandedContact === c.id ? <ChevronUp size={12} /> : <ChevronDown size={12} />}</span>
+                          </div>
+                          {expandedContact === c.id && (
+                            <div className="px-4 pb-4 pt-2 bg-[#010409] border-t border-[#1e293b]">
+                              <p className="text-[#858585] text-xs leading-relaxed whitespace-pre-wrap">{c.message}</p>
+                              <a href={`mailto:${c.email}?subject=Re: Your message&body=Hi ${c.name},%0A%0A`}
+                                className="inline-flex items-center gap-1.5 mt-3 text-[10px] px-3 py-1.5 rounded-lg border border-[rgba(0,212,255,0.3)] text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all">
+                                <ArrowUpRight size={10} /> Reply via Email
+                              </a>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </Card>
+                  </>
                 )}
               </div>
             )}
@@ -909,37 +925,74 @@ export default function AdminPage() {
                     {loading && <div className="flex items-center gap-2 text-[#333] text-xs"><Loader2 size={12} className="animate-spin" /> Loading...</div>}
 
                     {!loading && blogs.length === 0 && (
-                      <EmptyState icon={<FileText size={40} />} text="No posts yet. Use Dashboard → Seed Sample Posts to get started." />
+                      <EmptyState icon={<FileText size={40} />} text="No posts yet. Click '+ New Post' to write your first blog." />
                     )}
 
                     {!loading && blogs.length > 0 && (
-                      <Card className="overflow-hidden">
-                        <div className="grid grid-cols-[12px_1fr_120px_80px_100px] gap-4 bg-[#111827] border-b border-[#1e293b] text-[9px] text-[#444] px-4 py-2.5 uppercase tracking-wider">
-                          <span /><span>Title</span><span>Tags</span><span>Status</span><span>Actions</span>
+                      <>
+                        {/* Mobile: blog cards */}
+                        <div className="md:hidden space-y-2">
+                          {blogs.map((b) => (
+                            <Card key={b.id} className="px-4 py-3.5">
+                              <div className="flex items-start gap-3">
+                                <div className="w-2.5 h-2.5 rounded-full mt-1 flex-shrink-0" style={{ background: b.cover_color, boxShadow: `0 0 6px ${b.cover_color}66` }} />
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                                    <p className="text-[#e2e8f0] text-sm font-medium">{b.title}</p>
+                                    <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold border ${b.published ? "text-[#00ff88] bg-[rgba(0,255,136,0.08)] border-[rgba(0,255,136,0.2)]" : "text-[#444] bg-[#0a0e1a] border-[#1e293b]"}`}>
+                                      {b.published ? "LIVE" : "DRAFT"}
+                                    </span>
+                                  </div>
+                                  <div className="flex flex-wrap gap-1 mb-2">
+                                    {b.tags?.slice(0, 3).map((t) => (
+                                      <span key={t} className="text-[9px] px-1.5 py-0.5 rounded bg-[#111827] border border-[#1e293b] text-[#444]">{t}</span>
+                                    ))}
+                                  </div>
+                                  <div className="flex items-center gap-4">
+                                    <Btn variant="outline" size="xs" onClick={() => setEditBlog(b)}><Pencil size={10} /> Edit</Btn>
+                                    <a href={`/blog/${b.slug}`} target="_blank"
+                                      className="text-[10px] text-[#444] hover:text-[#00ff88] flex items-center gap-1 transition-colors">
+                                      <Eye size={10} /> View
+                                    </a>
+                                    <Btn variant="danger" size="xs" onClick={() => deleteItem(`/api/admin/blogs/${b.id}`, "blogs", b.title)}>
+                                      <Trash2 size={10} /> Delete
+                                    </Btn>
+                                  </div>
+                                </div>
+                              </div>
+                            </Card>
+                          ))}
                         </div>
-                        {blogs.map((b) => (
-                          <div key={b.id} className="grid grid-cols-[12px_1fr_120px_80px_100px] gap-4 px-4 py-3.5 text-xs border-b border-[#1e293b] last:border-0 hover:bg-[#111827] transition-colors items-start">
-                            <div className="w-2 h-2 rounded-full mt-1 flex-shrink-0" style={{ background: b.cover_color, boxShadow: `0 0 6px ${b.cover_color}66` }} />
-                            <div>
-                              <p className="text-[#e2e8f0] font-medium truncate">{b.title}</p>
-                              <p className="text-[#2a3444] text-[10px] mt-0.5">/blog/{b.slug}</p>
-                            </div>
-                            <div className="flex flex-wrap gap-1">
-                              {b.tags?.slice(0, 2).map((t) => (
-                                <span key={t} className="text-[9px] px-1.5 py-0.5 rounded bg-[#111827] border border-[#1e293b] text-[#444]">{t}</span>
-                              ))}
-                            </div>
-                            <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold w-fit ${b.published ? "text-[#00ff88] bg-[rgba(0,255,136,0.08)] border border-[rgba(0,255,136,0.2)]" : "text-[#444] bg-[#0a0e1a] border border-[#1e293b]"}`}>
-                              {b.published ? "LIVE" : "DRAFT"}
-                            </span>
-                            <div className="flex gap-3">
-                              <Btn variant="ghost" size="xs" onClick={() => setEditBlog(b)}><Pencil size={10} /></Btn>
-                              <a href={`/blog/${b.slug}`} target="_blank" className="text-[#444] hover:text-[#00ff88] transition-colors"><Eye size={10} /></a>
-                              <Btn variant="danger" size="xs" onClick={() => deleteItem(`/api/admin/blogs/${b.id}`, "blogs", b.title)}><Trash2 size={10} /></Btn>
-                            </div>
+
+                        {/* Desktop: table */}
+                        <Card className="hidden md:block overflow-hidden">
+                          <div className="grid grid-cols-[12px_1fr_120px_80px_100px] gap-4 bg-[#111827] border-b border-[#1e293b] text-[9px] text-[#444] px-4 py-2.5 uppercase tracking-wider">
+                            <span /><span>Title</span><span>Tags</span><span>Status</span><span>Actions</span>
                           </div>
-                        ))}
-                      </Card>
+                          {blogs.map((b) => (
+                            <div key={b.id} className="grid grid-cols-[12px_1fr_120px_80px_100px] gap-4 px-4 py-3.5 text-xs border-b border-[#1e293b] last:border-0 hover:bg-[#111827] transition-colors items-start">
+                              <div className="w-2 h-2 rounded-full mt-1 flex-shrink-0" style={{ background: b.cover_color, boxShadow: `0 0 6px ${b.cover_color}66` }} />
+                              <div>
+                                <p className="text-[#e2e8f0] font-medium truncate">{b.title}</p>
+                                <p className="text-[#2a3444] text-[10px] mt-0.5">/blog/{b.slug}</p>
+                              </div>
+                              <div className="flex flex-wrap gap-1">
+                                {b.tags?.slice(0, 2).map((t) => (
+                                  <span key={t} className="text-[9px] px-1.5 py-0.5 rounded bg-[#111827] border border-[#1e293b] text-[#444]">{t}</span>
+                                ))}
+                              </div>
+                              <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold w-fit ${b.published ? "text-[#00ff88] bg-[rgba(0,255,136,0.08)] border border-[rgba(0,255,136,0.2)]" : "text-[#444] bg-[#0a0e1a] border border-[#1e293b]"}`}>
+                                {b.published ? "LIVE" : "DRAFT"}
+                              </span>
+                              <div className="flex gap-3">
+                                <Btn variant="ghost" size="xs" onClick={() => setEditBlog(b)}><Pencil size={10} /></Btn>
+                                <a href={`/blog/${b.slug}`} target="_blank" className="text-[#444] hover:text-[#00ff88] transition-colors"><Eye size={10} /></a>
+                                <Btn variant="danger" size="xs" onClick={() => deleteItem(`/api/admin/blogs/${b.id}`, "blogs", b.title)}><Trash2 size={10} /></Btn>
+                              </div>
+                            </div>
+                          ))}
+                        </Card>
+                      </>
                     )}
                   </>
                 )}

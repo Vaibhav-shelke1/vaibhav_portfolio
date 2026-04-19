@@ -1,6 +1,3 @@
-/**
- * Admin notification email sent to Vaibhav when someone contacts him.
- */
 export function getAdminNotificationEmailHTML(
   name: string,
   email: string,
@@ -9,7 +6,7 @@ export function getAdminNotificationEmailHTML(
   const escapedMessage = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const timestamp = new Date().toLocaleString("en-IN", {
     timeZone: "Asia/Kolkata",
-    dateStyle: "full",
+    dateStyle: "medium",
     timeStyle: "short",
   });
 
@@ -20,142 +17,64 @@ export function getAdminNotificationEmailHTML(
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>New Contact Message</title>
 </head>
-<body style="margin:0;padding:0;background-color:#0a0e1a;font-family:'Segoe UI',Tahoma,Geneva,sans-serif;">
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:'Segoe UI',Tahoma,Geneva,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;border:1px solid #e4e4e7;">
 
-<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0a0e1a;padding:48px 16px;">
-  <tr>
-    <td align="center">
-      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+          <!-- Header -->
+          <tr>
+            <td style="background:#09090b;padding:24px 32px;">
+              <p style="margin:0;font-family:'Courier New',monospace;color:#00ff88;font-size:17px;font-weight:700;">&gt; vaibhav.shelke / alerts</p>
+              <p style="margin:4px 0 0;color:#71717a;font-size:12px;">New contact message · ${timestamp} IST</p>
+            </td>
+          </tr>
 
-        <!-- ALERT TOP BAR -->
-        <tr>
-          <td style="height:3px;background:linear-gradient(90deg,#ffd32a,#ff6b35);border-radius:3px 3px 0 0;"></td>
-        </tr>
+          <!-- Body -->
+          <tr>
+            <td style="padding:32px;">
+              <h2 style="margin:0 0 20px;color:#09090b;font-size:20px;font-weight:700;">New message from ${name}</h2>
 
-        <!-- HEADER -->
-        <tr>
-          <td style="background-color:#0d1117;border:1px solid #1e293b;border-top:none;padding:24px 40px;">
-            <table width="100%" cellpadding="0" cellspacing="0">
-              <tr>
-                <td>
-                  <p style="margin:0;font-family:'Courier New',monospace;color:#00ff88;font-size:18px;font-weight:700;">
-                    &gt; vaibhav.shelke / alerts
-                  </p>
-                  <p style="margin:4px 0 0;font-family:'Courier New',monospace;color:#475569;font-size:11px;">
-                    Portfolio Admin Dashboard
-                  </p>
-                </td>
-                <td align="right">
-                  <span style="display:inline-block;font-family:'Courier New',monospace;font-size:10px;color:#ffd32a;border:1px solid rgba(255,211,42,0.4);background:rgba(255,211,42,0.07);padding:4px 10px;border-radius:20px;">
-                    ⚡ NEW MESSAGE
-                  </span>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+              <!-- Sender info -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;border-radius:6px;margin-bottom:20px;">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0 0 6px;color:#52525b;font-size:14px;"><strong style="color:#09090b;">Name:</strong> ${name}</p>
+                    <p style="margin:0;color:#52525b;font-size:14px;"><strong style="color:#09090b;">Email:</strong> <a href="mailto:${email}" style="color:#2563eb;text-decoration:none;">${email}</a></p>
+                  </td>
+                </tr>
+              </table>
 
-        <!-- BODY -->
-        <tr>
-          <td style="background-color:#111827;border:1px solid #1e293b;border-top:none;padding:40px;">
+              <!-- Message -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;border-radius:6px;margin-bottom:28px;">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0 0 8px;color:#71717a;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Message</p>
+                    <p style="margin:0;color:#3f3f46;font-size:14px;line-height:1.7;white-space:pre-wrap;">${escapedMessage}</p>
+                  </td>
+                </tr>
+              </table>
 
-            <!-- Alert title -->
-            <h2 style="margin:0 0 8px;color:#e2e8f0;font-size:22px;font-weight:700;">
-              You have a new message 📬
-            </h2>
-            <p style="margin:0 0 32px;color:#64748b;font-size:13px;font-family:'Courier New',monospace;">
-              Received: ${timestamp} IST
-            </p>
+              <!-- Reply button -->
+              <a href="mailto:${email}?subject=Re: Your message to Vaibhav Shelke"
+                style="display:inline-block;background:#09090b;color:#ffffff;text-decoration:none;padding:12px 28px;border-radius:6px;font-size:14px;font-weight:600;">
+                Reply to ${name}
+              </a>
+            </td>
+          </tr>
 
-            <!-- Sender info card -->
-            <table width="100%" cellpadding="0" cellspacing="0"
-              style="background-color:#0d1117;border:1px solid #1e293b;border-radius:8px;margin-bottom:20px;">
-              <tr>
-                <td style="padding:20px 24px;">
-                  <p style="margin:0 0 14px;font-family:'Courier New',monospace;color:#475569;font-size:11px;">
-                    // sender_info
-                  </p>
-                  <table cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td style="padding:6px 0;border-bottom:1px solid #1e293b;">
-                        <span style="font-family:'Courier New',monospace;color:#64748b;font-size:12px;display:inline-block;width:80px;">Name</span>
-                        <span style="font-family:'Courier New',monospace;color:#00d4ff;font-size:13px;font-weight:600;">${name}</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="padding:6px 0;">
-                        <span style="font-family:'Courier New',monospace;color:#64748b;font-size:12px;display:inline-block;width:80px;">Email</span>
-                        <a href="mailto:${email}"
-                          style="font-family:'Courier New',monospace;color:#00ff88;font-size:13px;font-weight:600;text-decoration:none;">
-                          ${email}
-                        </a>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+          <!-- Footer -->
+          <tr>
+            <td style="background:#f4f4f5;padding:14px 32px;border-top:1px solid #e4e4e7;">
+              <p style="margin:0;color:#a1a1aa;font-size:11px;">Portfolio admin alert · do not forward</p>
+            </td>
+          </tr>
 
-            <!-- Message card -->
-            <table width="100%" cellpadding="0" cellspacing="0"
-              style="background-color:#0d1117;border:1px solid #1e293b;border-radius:8px;margin-bottom:32px;">
-              <tr>
-                <td style="padding:20px 24px;">
-                  <p style="margin:0 0 14px;font-family:'Courier New',monospace;color:#475569;font-size:11px;">
-                    // message_body
-                  </p>
-                  <p style="margin:0;color:#94a3b8;font-size:14px;line-height:1.8;white-space:pre-wrap;">
-${escapedMessage}
-                  </p>
-                </td>
-              </tr>
-            </table>
-
-            <!-- CTA button -->
-            <table cellpadding="0" cellspacing="0">
-              <tr>
-                <td style="padding-right:12px;">
-                  <a href="mailto:${email}?subject=Re: Your message to Vaibhav Shelke"
-                    style="display:inline-block;background-color:#00ff88;color:#0a0e1a;text-decoration:none;padding:12px 28px;border-radius:6px;font-family:'Courier New',monospace;font-size:13px;font-weight:700;">
-                    → Reply Now
-                  </a>
-                </td>
-                <td>
-                  <a href="https://www.linkedin.com/in/vaibhav-shelke-264ba22b7"
-                    style="display:inline-block;background-color:#0d1117;border:1px solid rgba(0,212,255,0.4);color:#00d4ff;text-decoration:none;padding:12px 24px;border-radius:6px;font-family:'Courier New',monospace;font-size:13px;">
-                    LinkedIn
-                  </a>
-                </td>
-              </tr>
-            </table>
-
-          </td>
-        </tr>
-
-        <!-- DB INFO -->
-        <tr>
-          <td style="background-color:#0d1117;border:1px solid #1e293b;border-top:none;padding:16px 40px;">
-            <p style="margin:0;font-family:'Courier New',monospace;color:#334155;font-size:11px;">
-              ✓ &nbsp;Saved to <span style="color:#475569;">neondb → contact_messages</span>
-              &nbsp;·&nbsp; portfolio.db
-            </p>
-          </td>
-        </tr>
-
-        <!-- FOOTER -->
-        <tr>
-          <td style="background-color:#0d1117;border:1px solid #1e293b;border-top:1px solid #111827;border-radius:0 0 10px 10px;padding:16px 40px;">
-            <p style="margin:0;font-family:'Courier New',monospace;color:#1e293b;font-size:10px;">
-              vaibhav.shelke portfolio &nbsp;·&nbsp; automated admin alert &nbsp;·&nbsp; do not forward
-            </p>
-          </td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
-
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>`;
 }

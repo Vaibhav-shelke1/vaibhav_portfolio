@@ -456,6 +456,11 @@ function StatusBar({ activeId }: { activeId: FileId }) {
         <span className="px-2.5 h-full items-center text-[#858585] hover:bg-white/5 cursor-pointer transition-colors hidden sm:flex">
           ⚡ Port: 3000
         </span>
+        <a href="/blog"
+          className="px-2.5 h-full flex items-center gap-1 text-[#00ff88] hover:bg-[rgba(0,255,136,0.08)] transition-colors text-[10px] font-mono flex-shrink-0"
+          style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}>
+          &gt;_ blog
+        </a>
       </div>
     </div>
   );

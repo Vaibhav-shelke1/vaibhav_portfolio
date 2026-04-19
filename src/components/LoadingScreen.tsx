@@ -36,7 +36,7 @@ export default function LoadingScreen({ onDone }: { onDone: () => void }) {
         <motion.div
           key="loader"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
           className="fixed inset-0 z-[9999] bg-bg flex items-center justify-center"
         >
           <div className="w-full max-w-lg px-8">

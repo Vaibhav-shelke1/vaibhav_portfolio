@@ -1,5 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 function isAuthorized(req: Request) {
   return req.headers.get("x-admin-key") === process.env.ADMIN_KEY;
@@ -44,5 +45,7 @@ export async function POST(req: Request) {
      VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
     [title, slug, excerpt ?? "", content, tags ?? [], cover_color ?? "#00ff88", published ?? false]
   );
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${slug}`);
   return NextResponse.json({ blog: rows[0] }, { status: 201 });
 }

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { marked } from "marked";
 import { notFound } from "next/navigation";

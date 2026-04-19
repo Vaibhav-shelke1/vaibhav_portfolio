@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       sendEmail({
         to: email,
         subject: `Hey ${name}, thanks for reaching out!`,
-        html: getConfirmationEmailHTML(name),
+        html: getConfirmationEmailHTML(name, message),
       }),
       // Admin notification to Vaibhav
       sendEmail({

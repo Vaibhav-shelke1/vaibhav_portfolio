@@ -48,7 +48,9 @@ function MatrixRain() {
       }
     };
 
-    const interval = setInterval(draw, 45);
+    const interval = setInterval(() => {
+      if (!document.hidden) draw();
+    }, 80);
     return () => {
       clearInterval(interval);
       window.removeEventListener("resize", resize);
@@ -226,6 +228,13 @@ function ProfileAvatar() {
           className="flex-1 py-1.5 text-center text-[10px] font-mono rounded border transition-all duration-200 text-[#64748b] border-[#1e293b] hover:text-cyan-glow hover:border-[rgba(0,212,255,0.3)]"
         >
           LinkedIn
+        </a>
+        <a
+          href="/blog"
+          className="flex-1 py-1.5 text-center text-[10px] font-mono rounded border transition-all duration-200 text-[#00ff88] border-[rgba(0,255,136,0.25)] hover:bg-[rgba(0,255,136,0.08)] hover:border-[rgba(0,255,136,0.5)]"
+          style={{ boxShadow: "0 0 12px rgba(0,255,136,0.06)" }}
+        >
+          &gt;_ Blog
         </a>
       </div>
     </motion.div>
