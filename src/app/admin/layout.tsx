@@ -8,7 +8,11 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Admin",
+    title: "VS Admin",
+    startupImage: "/apple-touch-icon.svg",
+  },
+  icons: {
+    apple: [{ url: "/apple-touch-icon.svg", type: "image/svg+xml" }],
   },
   other: {
     "mobile-web-app-capable": "yes",

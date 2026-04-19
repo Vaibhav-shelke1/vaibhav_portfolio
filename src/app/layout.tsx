@@ -6,6 +6,14 @@ export const metadata: Metadata = {
   description: "Full Stack Developer specializing in React, Next.js, Node.js, and TypeScript. Building production-grade applications.",
   keywords: ["Vaibhav Shelke", "Full Stack Developer", "React", "Next.js", "Node.js", "TypeScript"],
   authors: [{ name: "Vaibhav Shelke" }],
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.svg", type: "image/svg+xml" },
+    ],
+  },
   openGraph: {
     title: "Vaibhav Shelke | Full Stack Developer",
     description: "Full Stack Developer specializing in React, Next.js, Node.js, and TypeScript.",

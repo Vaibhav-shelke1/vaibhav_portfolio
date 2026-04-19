@@ -476,7 +476,7 @@ export default function AdminPage() {
   const [installDismissed, setInstallDismissed] = useState(false);
 
   useEffect(() => {
-    const saved = sessionStorage.getItem("admin_key");
+    const saved = localStorage.getItem("admin_key");
     if (saved) { setAdminKey(saved); setAuthed(true); }
     if ("Notification" in window) setNotifPerm(Notification.permission);
     const handler = (e: Event) => { e.preventDefault(); setInstallPrompt(e); };
@@ -488,7 +488,7 @@ export default function AdminPage() {
     setAuthLoading(true);
     const res = await fetch("/api/admin/contacts", { headers: { "x-admin-key": key } });
     setAuthLoading(false);
-    if (res.ok) { sessionStorage.setItem("admin_key", key); setAdminKey(key); setAuthed(true); }
+    if (res.ok) { localStorage.setItem("admin_key", key); setAdminKey(key); setAuthed(true); }
     else setAuthError(true);
   };
 
@@ -683,7 +683,7 @@ export default function AdminPage() {
       </nav>
 
       <div className="px-2 py-3 border-t border-[#1e293b]">
-        <button onClick={() => { sessionStorage.removeItem("admin_key"); setAuthed(false); }}
+        <button onClick={() => { localStorage.removeItem("admin_key"); setAuthed(false); }}
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-mono text-[#333] hover:text-[rgba(255,71,87,0.7)] hover:bg-[rgba(255,71,87,0.05)] transition-all">
           <LogOut size={14} /> Logout
         </button>
@@ -724,7 +724,7 @@ export default function AdminPage() {
         {/* Mobile top status bar */}
         <div className="md:hidden flex items-center justify-between px-4 py-2.5 border-b border-[#1e293b] bg-[#010409] sticky top-0 z-40">
           <span className="text-[#00ff88] font-bold text-xs font-mono">&gt;_ {tab}</span>
-          <button onClick={() => { sessionStorage.removeItem("admin_key"); setAuthed(false); }}
+          <button onClick={() => { localStorage.removeItem("admin_key"); setAuthed(false); }}
             className="text-[#2a3444] hover:text-[rgba(255,71,87,0.7)] transition-colors p-1">
             <LogOut size={14} />
           </button>
