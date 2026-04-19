@@ -235,10 +235,10 @@ function ProfileAvatar() {
 /* ─── Metrics ───────────────────────────────────────────────────── */
 
 const METRICS = [
-  { label: "Daily API Requests", value: "50K+",   color: "#00ff88" },
-  { label: "System Uptime",      value: "99.9%",  color: "#00d4ff" },
-  { label: "Query Optimised",    value: "−40%",   color: "#9d4edd" },
-  { label: "Monthly Txns",       value: "$100K+", color: "#ffd32a" },
+  { label: "DSA Problems Solved", value: "200+", color: "#00ff88" },
+  { label: "Projects Shipped",    value: "4+",   color: "#00d4ff" },
+  { label: "Internships Done",    value: "2",    color: "#9d4edd" },
+  { label: "Technologies Used",   value: "10+",  color: "#ffd32a" },
 ];
 
 /* ─── Hero ──────────────────────────────────────────────────────── */
