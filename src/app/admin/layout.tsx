@@ -9,13 +9,10 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "VS Admin",
-    startupImage: "/apple-touch-icon.svg",
-  },
-  icons: {
-    apple: [{ url: "/apple-touch-icon.svg", type: "image/svg+xml" }],
   },
   other: {
     "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
   },
 };
 

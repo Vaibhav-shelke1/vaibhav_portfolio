@@ -1,20 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00ff88"/>
-      <stop offset="100%" stop-color="#00d4ff"/>
-    </linearGradient>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
   <rect width="180" height="180" rx="38" fill="#0d1117"/>
-  <rect x="20" y="18" width="140" height="4" rx="2" fill="url(#grad)"/>
-  <text
-    x="20"
-    y="124"
-    font-family="'Courier New', Courier, monospace"
-    font-size="96"
-    font-weight="900"
-    fill="url(#grad)"
-    letter-spacing="-4"
-  >VS</text>
-  <circle cx="90" cy="156" r="5" fill="url(#grad)" opacity="0.6"/>
+  <rect x="20" y="18" width="140" height="5" rx="2.5" fill="#00ff88" opacity="0.9"/>
+  <polyline
+    points="22,55 90,145 158,55"
+    stroke="#00ff88"
+    stroke-width="26"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
 </svg>
