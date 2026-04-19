@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="32" height="32" rx="7" fill="#010409"/>
+
+  <!-- Subtle border -->
+  <rect x="1" y="1" width="30" height="30" rx="6.5" fill="none" stroke="#00ff88" stroke-width="0.8" stroke-opacity="0.35"/>
+
+  <!-- > chevron -->
+  <path
+    d="M 6 10 L 14.5 16 L 6 22"
+    stroke="#00ff88"
+    stroke-width="2.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+    filter="url(#glow)"
+  />
+
+  <!-- _ cursor bar -->
+  <path
+    d="M 17.5 22 L 27 22"
+    stroke="#00ff88"
+    stroke-width="2.8"
+    stroke-linecap="round"
+    fill="none"
+    filter="url(#glow)"
+  />
+</svg>

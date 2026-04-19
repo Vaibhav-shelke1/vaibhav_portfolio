@@ -177,7 +177,7 @@ export default function Terminal() {
         animate={{ scale: 1 }}
         transition={{ delay: 2 }}
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[var(--card)] border border-[rgba(0,255,136,0.4)] text-green-glow font-mono text-lg flex items-center justify-center shadow-lg hover:bg-[rgba(0,255,136,0.1)] hover:shadow-[0_0_20px_rgba(0,255,136,0.3)] transition-all duration-200"
+        className="fixed bottom-6 right-6 z-[70] w-12 h-12 rounded-full bg-[var(--card)] border border-[rgba(0,255,136,0.4)] text-green-glow font-mono text-lg flex items-center justify-center shadow-lg hover:bg-[rgba(0,255,136,0.1)] hover:shadow-[0_0_20px_rgba(0,255,136,0.3)] transition-all duration-200"
         title="Open terminal"
         aria-label="Open terminal"
       >
@@ -192,7 +192,7 @@ export default function Terminal() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.95 }}
             transition={{ duration: 0.25 }}
-            className="fixed bottom-22 right-6 z-50 w-[min(520px,calc(100vw-24px))] h-80 bg-[var(--surface)] border border-[rgba(0,255,136,0.25)] rounded-lg shadow-2xl shadow-black/60 flex flex-col overflow-hidden"
+            className="fixed bottom-[88px] right-6 z-[70] w-[min(520px,calc(100vw-24px))] h-80 bg-[var(--surface)] border border-[rgba(0,255,136,0.25)] rounded-lg shadow-2xl shadow-black/60 flex flex-col overflow-hidden"
           >
             {/* Title bar */}
             <div className="flex items-center gap-2 px-3 py-2 border-b border-[var(--border)] bg-[var(--card)] flex-shrink-0">

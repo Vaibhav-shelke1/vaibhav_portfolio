@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Vaibhav Shelke" }],
   openGraph: {
     title: "Vaibhav Shelke | Full Stack Developer",
-    description: "Production-grade Full Stack Developer. 50K+ API requests/day. 99.9% uptime.",
+    description: "Full Stack Developer specializing in React, Next.js, Node.js, and TypeScript.",
     type: "website",
   },
 };
