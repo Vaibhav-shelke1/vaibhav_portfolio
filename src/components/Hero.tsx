@@ -333,7 +333,7 @@ export default function Hero({ onNavigate }: { onNavigate: (id: string) => void 
               className="text-[var(--muted)] font-mono text-sm mt-4 mb-7 leading-relaxed space-y-1 max-w-lg"
             >
               <p><span className="text-[var(--border)]">//</span> B.Tech CSE &apos;25 — MIT Chh. Sambhajinagar</p>
-              <p><span className="text-[var(--border)]">//</span> Building production apps handling 50K+ API requests/day</p>
+              <p><span className="text-[var(--border)]">//</span> Building scalable web applications</p>
               <p><span className="text-[var(--border)]">//</span> Open to full-time roles &amp; exciting collaborations</p>
             </motion.div>
 
